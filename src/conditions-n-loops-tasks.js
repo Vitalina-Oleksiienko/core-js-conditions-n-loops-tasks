@@ -22,9 +22,6 @@
  *  -5 => false
  */
 function isPositive(number) {
-  if (Number.isNaN(number) || number === Infinity || number === -Infinity) {
-    return false;
-  }
   return number >= 0;
 }
 
@@ -151,46 +148,7 @@ function convertToRomanNumerals(num) {
  *  '10,5'    => 'one zero point five'
  *  '1950.2'  => 'one nine five zero point two'
  */
-function convertNumberToString(numberStr) {
-  const digitsToWords = {
-    0: 'zero',
-    1: 'one',
-    2: 'two',
-    3: 'three',
-    4: 'four',
-    5: 'five',
-    6: 'six',
-    7: 'seven',
-    8: 'eight',
-    9: 'nine',
-    '.': 'point',
-    '-': 'minus',
-  };
-
-  function convertDigitToWord(digit) {
-    return digitsToWords[digit] || '';
-  }
-
-  function processNegativeNumber(str) {
-    if (str[0] === '-') {
-      return `${digitsToWords['-']} ${str.substring(1)}`;
-    }
-    return str;
-  }
-
-  function processNumberString(str) {
-    let result = '';
-    for (let i = 0; i < str.length; i += 1) {
-      const digit = str[i];
-      result += `${convertDigitToWord(digit)} `;
-    }
-    return result.trim();
-  }
-
-  const withoutNegative = processNegativeNumber(numberStr);
-  const result = processNumberString(withoutNegative);
-  return result;
-}
+function convertNumberToString() {}
 
 /**
  * Determines whether a string is a palindrome.
@@ -235,21 +193,11 @@ function isPalindrome(str) {
  *  'qwerty', 'p'     => -1
  */
 function getIndexOf(str, letter) {
-  let index = 0;
-  const letterCode = letter.charCodeAt(0);
-
-  while (index < str.length) {
-    const char = str[index];
-    const charCode = char.charCodeAt(0);
-
-    if (charCode === letterCode) {
-      return true;
-    }
-
-    index += 1;
+  for (let i = 0; i < str.length; i += 1) {
+    if (str[i] === letter) return i;
   }
 
-  return false;
+  return -1;
 }
 
 /**
@@ -500,43 +448,8 @@ function shuffleChar(str, iterations) {
  * @param {number} number The source number
  * @returns {number} The nearest larger number, or original number if none exists.
  */
-function getNearestBigger(number) {
-  const digits = [];
-  let tempNumber = number;
-
-  while (tempNumber > 0) {
-    digits.push(tempNumber % 10);
-    tempNumber = Math.floor(tempNumber / 10);
-  }
-
-  digits.reverse();
-
-  let i = digits.length - 2;
-  while (i >= 0 && digits[i] >= digits[i + 1]) {
-    i -= 1;
-  }
-
-  if (i < 0) {
-    return number;
-  }
-
-  let j = digits.length - 1;
-  while (digits[j] <= digits[i]) {
-    j -= 1;
-  }
-
-  [digits[i], digits[j]] = [digits[j], digits[i]];
-
-  digits.slice(i + 1).sort((a, b) => a - b);
-
-  let result = 0;
-  let multiplier = 1;
-  for (let m = 0; m < digits.length; m += 1) {
-    result += digits[m] * multiplier;
-    multiplier *= 10;
-  }
-
-  return result;
+function getNearestBigger(/* number */) {
+  throw new Error('Not implemented');
 }
 
 module.exports = {
