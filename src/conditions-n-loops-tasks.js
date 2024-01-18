@@ -148,7 +148,55 @@ function convertToRomanNumerals(num) {
  *  '10,5'    => 'one zero point five'
  *  '1950.2'  => 'one nine five zero point two'
  */
-function convertNumberToString() {}
+function convertNumberToString(numberStr) {
+  const numbersToWords = [
+    'zero',
+    'one',
+    'two',
+    'three',
+    'four',
+    'five',
+    'six',
+    'seven',
+    'eight',
+    'nine',
+  ];
+
+  let result = '';
+
+  for (let i = 0; i < numberStr.length; i += 1) {
+    const char = numberStr[i];
+    const digit = parseInt(char, 10);
+    switch (char) {
+      case '.':
+      case ',':
+        result += `point `;
+        break;
+      case '-':
+        result += `minus `;
+        break;
+      case '0':
+      case '1':
+      case '2':
+      case '3':
+      case '4':
+      case '5':
+      case '6':
+      case '7':
+      case '8':
+      case '9':
+        if (i === numberStr.length - 1) {
+          result += `${numbersToWords[digit]}`;
+        } else {
+          result += `${numbersToWords[digit]} `;
+        }
+        break;
+      default:
+        break;
+    }
+  }
+  return result;
+}
 
 /**
  * Determines whether a string is a palindrome.
@@ -194,7 +242,9 @@ function isPalindrome(str) {
  */
 function getIndexOf(str, letter) {
   for (let i = 0; i < str.length; i += 1) {
-    if (str[i] === letter) return i;
+    if (str[i] === letter) {
+      return i;
+    }
   }
 
   return -1;
@@ -378,24 +428,45 @@ function rotateMatrix(matrix) {
  *  [2, 9, 5, 9]    => [2, 5, 9, 9]
  *  [-2, 9, 5, -3]  => [-3, -2, 5, 9]
  */
-function sortByAsc(arr) {
-  const { length } = arr;
+function swap(arr, l, r) {
+  const arrCopy = arr;
+  const temp = arrCopy[l];
+  arrCopy[l] = arrCopy[r];
+  arrCopy[r] = temp;
+}
 
-  for (let i = 0; i < length - 1; i += 1) {
-    // let swapped = false;
-    for (let j = 0; j < length - i - 1; j += 1) {
-      if (arr[j] > arr[j + 1]) {
-        const sortedArr = [...arr];
+function partition(arr, leftPointer, rightPointer) {
+  let l = leftPointer;
+  let r = rightPointer;
+  const pivot = arr[Math.floor((leftPointer + rightPointer) / 2)];
 
-        [sortedArr[j], sortedArr[j + 1]] = [sortedArr[j + 1], sortedArr[j]];
-        // swapped = true;
-      }
+  while (l <= r) {
+    while (arr[l] < pivot) {
+      l += 1;
     }
-    // if (!swapped) {
-    //   break;
-    // }
+    while (arr[r] > pivot) {
+      r -= 1;
+    }
+    if (l <= r) {
+      swap(arr, l, r);
+      l += 1;
+      r -= 1;
+    }
   }
+  return l;
+}
 
+function sortByAsc(arr, leftPointer = 0, rightPointer = arr.length - 1) {
+  if (arr.length < 2) return arr;
+
+  const index = partition(arr, leftPointer, rightPointer);
+
+  if (leftPointer < index - 1) {
+    sortByAsc(arr, leftPointer, index - 1);
+  }
+  if (rightPointer > index) {
+    sortByAsc(arr, index, rightPointer);
+  }
   return arr;
 }
 
@@ -417,18 +488,28 @@ function sortByAsc(arr) {
  *  'qwerty', 3 => 'qetwry' => 'qtrewy' => 'qrwtey'
  */
 function shuffleChar(str, iterations) {
-  const { length } = str;
-  const chars = str.split('');
+  let copyStr = str;
+  let finIteration = iterations;
 
-  for (let iteration = 0; iteration < iterations; iteration += 1) {
-    for (let i = 1; i < length; i += 2) {
-      const temp = chars[i - 1];
-      chars[i - 1] = chars[i];
-      chars[i] = temp;
+  while (finIteration) {
+    let oddChars = '';
+    let evenChars = '';
+
+    for (let i = 0; i < copyStr.length; i += 1) {
+      if (i % 2) {
+        oddChars += copyStr[i];
+      } else {
+        evenChars += copyStr[i];
+      }
+    }
+    copyStr = `${evenChars}${oddChars}`;
+    finIteration -= 1;
+
+    if (copyStr === str) {
+      finIteration = iterations % (iterations - finIteration);
     }
   }
-
-  return chars.join('');
+  return copyStr;
 }
 
 /**
