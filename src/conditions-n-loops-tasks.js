@@ -347,14 +347,23 @@ function getBalanceIndex(arr) {
  *        ]
  */
 function getSpiralMatrix(size) {
-  const matrix = new Array(size).fill(0).map(() => new Array(size).fill(0));
+  if (size <= 0) {
+    throw new Error('Matrix size must be a positive integer');
+  }
+
+  const matrix = new Array(size);
+
+  for (let i = 0; i < size; i += 1) {
+    matrix[i] = new Array(size);
+  }
+
   let num = 1;
   let top = 0;
   let bottom = size - 1;
   let left = 0;
   let right = size - 1;
 
-  while (num <= size * size) {
+  while (left <= right && top <= bottom) {
     for (let i = left; i <= right; i += 1) {
       matrix[top][i] = num;
       num += 1;
