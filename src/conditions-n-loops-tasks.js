@@ -111,24 +111,35 @@ function isIsoscelesTriangle(a, b, c) {
  */
 function convertToRomanNumerals(num) {
   if (num < 1 || num > 39) {
-    throw new Error(
-      'Number out of range. Please provide a number between 1 and 39.'
-    );
+    throw new Error('Input must be between 1 and 39');
   }
 
-  let currentNum = num;
   let result = '';
 
-  function addRomanSymbol(symbol, value) {
-    while (currentNum >= value) {
-      result += symbol;
-      currentNum -= value;
+  const tens = Math.floor(num / 10);
+  if (tens > 0) {
+    for (let i = 0; i < tens; i += 1) {
+      result += 'X';
     }
   }
 
-  addRomanSymbol('X', 10);
-  addRomanSymbol('V', 5);
-  addRomanSymbol('I', 1);
+  const ones = num % 10;
+  if (ones > 0) {
+    if (ones === 4) {
+      result += 'IV';
+    } else if (ones === 9) {
+      result += 'IX';
+    } else if (ones >= 5) {
+      result += 'V';
+      for (let i = 0; i < ones - 5; i += 1) {
+        result += 'I';
+      }
+    } else {
+      for (let i = 0; i < ones; i += 1) {
+        result += 'I';
+      }
+    }
+  }
 
   return result;
 }
